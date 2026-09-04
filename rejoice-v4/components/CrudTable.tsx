@@ -1,0 +1,3 @@
+ "use client";
+import {useEffect,useState} from "react";import {supabase} from "@/lib/supabase";
+export function DataTable({table,columns,empty}:{table:string;columns:string[];empty:string}){const[rows,setRows]=useState<any[]>([]);useEffect(()=>{supabase.from(table).select("*").order("created_at",{ascending:false}).then(({data})=>setRows(data||[]))},[table]);return rows.length?<div className="card"><table className="table"><thead><tr>{columns.map(c=><th key={c}>{c}</th>)}</tr></thead><tbody>{rows.map(r=><tr key={r.id}>{columns.map(c=><td key={c}>{String(r[c.toLowerCase().replaceAll(" ","_")]??"—")}</td>)}</tr>)}</tbody></table></div>:<div className="card empty">{empty}</div>}
